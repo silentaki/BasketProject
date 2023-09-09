@@ -76,13 +76,13 @@ fs.createReadStream(filePath)
     /* calculate any fruits which has been in the basket for over 3 days */
     function listfruitsOverThreeDays(basket) {
       const filteredFruits = basket.filter((fruit) => parseInt(fruit.days) > 3);
-      const distinctFruitInfo = filteredFruits.map((fruit) => ({
+      const FruitInfo = filteredFruits.map((fruit) => ({
         name: fruit.name,
         size: fruit.size,
       }));
       console.log(
-        "Distinct fruits name and size over 3 days old:",
-        distinctFruitInfo
+        "fruits name and size over 3 days old:",
+        FruitInfo
       );
     }
 
