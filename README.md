@@ -10,11 +10,13 @@ Perform different functions by passing the data from csv file.
   - Check Node Version in terminal
     * ``node -v``
     * ``npm -v``
+  ### Step2: Create folder structure and clone the repository
   - Create a folder under the documents for Project. You can use commands in terminal too.
     * cd Documents
     * mkdir JSProject
     * cd JSProject
     * git clone repository url (https://github.com/silentaki/BasketProject.git)
+  ### Step3: Run the Application
   - Open visual studio and open the folder JSProject and select BasketProject. Run the following commands in terminal of VS Studio.
     * ``npm install``: this will install the dependencies.
     * ``cd specs``: to navigate to spec folder
