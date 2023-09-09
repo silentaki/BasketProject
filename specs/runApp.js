@@ -1,49 +1,59 @@
-const fs = require('fs');
-const csv = require('csv-parser');
-const filePath = '../fixtures/basket.csv';
+const fs = require("fs");
+const csv = require("csv-parser");
+const filePath = "../fixtures/basket.csv";
 const basket = [];
 
+/* convert csv file to json */
 fs.createReadStream(filePath)
   .pipe(csv({}))
   .on("data", (data) => basket.push(data))
   .on("end", () => {
+    console.log(`\n`);
+    /* Calculate the total number of fruits */
     function totalNumberOfFruits(basket) {
-      let totalPrice = 0;
+      let quantity = 0;
       for (let i in basket) {
-        totalPrice += parseInt(basket[i].size);
+        quantity += parseInt(basket[i].size);
       }
-      return console.log(`total number of fruits: ${totalPrice}`);
+      console.log(`Total number of fruits: ${quantity}`);
+      console.log(`\n`);
     }
 
+    /* Calculate the types of fruits. */
     function typesOfFruits(basket) {
       const distinctNames = new Set(basket.map((fruit) => fruit.name));
       const totalDistinctNames = distinctNames.size;
-      console.log("Total Number of Distinct Names:", totalDistinctNames);
+      console.log(`Types of fruit: ${totalDistinctNames}`);
+      console.log(`\n`);
     }
 
+    /* Calculate types of fruits in decending order */
     function sortBasketOfFruits(basket) {
       const fruitTotals = {};
 
-      for (let i = 0; i < basket.length; i++) {
+      for (let i in basket) {
         const fruit = basket[i];
         const name = fruit.name;
-        const size = parseFloat(fruit.size);
+        const size = parseInt(fruit.size);
 
         if (!isNaN(size)) {
           if (!fruitTotals[name]) {
             fruitTotals[name] = 0;
           }
-
           fruitTotals[name] += size;
         }
       }
       const sortedFruitTotals = Object.entries(fruitTotals)
         .map(([name, total]) => ({ name, total }))
         .sort((a, b) => b.total - a.total);
-
-      console.log(sortedFruitTotals);
+      console.log(
+        `The number of each type of fruit in descending order`,
+        sortedFruitTotals
+      );
+      console.log(`\n`);
     }
 
+    /* Print the characteristics (size, color, shape, days) of each fruit by type */
     function fruitsCharacteristics(basket) {
       const groupedCharacteristics = {};
 
@@ -56,31 +66,26 @@ fs.createReadStream(filePath)
 
         groupedCharacteristics[name].push({ size, color, shape, days });
       }
-
-      console.log(groupedCharacteristics);
+      console.log(
+        `The characteristics of each fruit by type`,
+        groupedCharacteristics
+      );
+      console.log(`\n`);
     }
 
+    /* calculate any fruits which has been in the basket for over 3 days */
     function listfruitsOverThreeDays(basket) {
-      const matchingFruitTotals = {};
-
-      for (const fruit of basket) {
-        const { name, days, size } = fruit;
-        const daysValue = parseInt(days);
-
-        if (daysValue > 3) {
-          if (!matchingFruitTotals[name]) {
-            matchingFruitTotals[name] = 0;
-          }
-
-          matchingFruitTotals[name] += parseFloat(size);
-        }
-      }
-
-      for (const name in matchingFruitTotals) {
-        const totalSize = matchingFruitTotals[name];
-        console.log(`${totalSize} ${name} are over 3 days old`);
-      }
+      const filteredFruits = basket.filter((fruit) => parseInt(fruit.days) > 3);
+      const distinctFruitInfo = filteredFruits.map((fruit) => ({
+        name: fruit.name,
+        size: fruit.size,
+      }));
+      console.log(
+        "Distinct fruits name and size over 3 days old:",
+        distinctFruitInfo
+      );
     }
+
     totalNumberOfFruits(basket);
     typesOfFruits(basket);
     sortBasketOfFruits(basket);
